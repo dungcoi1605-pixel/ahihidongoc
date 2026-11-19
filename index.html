@@ -11,796 +11,154 @@
     <title>SMS Number Manager</title>
 
     <style>
-
-      * {
-
-        box-sizing: border-box;
-
-      }
-
-      body {
-
-        margin: 0;
-
-        padding: 40px;
-
-        font-family: Inter, Arial, sans-serif;
-
-        background: #f5f7fb;
-
-        color: #1f2937;
-
-      }
-
-      .container {
-
-        max-width: 1450px;
-
-        margin: auto;
-
-      }
-
-      .card {
-
-        background: white;
-
-        border-radius: 14px;
-
-        padding: 24px;
-
-        box-shadow: 0 5px 25px rgba(0, 0, 0, 0.06);
-
-      }
-
-      h2 {
-
-        margin-top: 0;
-
-      }
-
-      .token-row {
-
-        display: flex;
-
-        justify-content: flex-end;
-
-        gap: 10px;
-
-        margin-bottom: 18px;
-
-      }
-
-      .controls {
-
-        display: flex;
-
-        flex-wrap: wrap;
-
-        align-items: end;
-
-        gap: 12px;
-
-        margin-bottom: 24px;
-
-      }
-
-      .controls .field {
-
-        width: 170px;
-
-      }
-
-      .field label {
-
-        display: block;
-
-        font-size: 13px;
-
-        margin-bottom: 6px;
-
-        color: #6b7280;
-
-      }
-
-      input,
-
-      select {
-
-        width: 100%;
-
-        height: 42px;
-
-        border: 1px solid #d1d5db;
-
-        border-radius: 8px;
-
-        padding: 0 12px;
-
-        outline: none;
-
-        background: white;
-
-      }
-
-      input:focus,
-
-      select:focus {
-
-        border-color: #2563eb;
-
-        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
-
-      }
-
-      .antd-select {
-
-        position: relative;
-
-        width: 100%;
-
-      }
-
-      .antd-select input {
-
-        padding: 0 58px 0 12px;
-
-        cursor: pointer;
-
-        transition:
-
-          border-color 0.2s,
-
-          box-shadow 0.2s;
-
-      }
-
-      .antd-select.open input,
-
-      .antd-select input:focus {
-
-        cursor: text;
-
-        border-color: #1677ff;
-
-        box-shadow: 0 0 0 2px rgba(5, 145, 255, 0.1);
-
-      }
-
-      .antd-select.disabled {
-
-        opacity: 0.55;
-
-      }
-
-      .select-arrow {
-
-        position: absolute;
-
-        right: 13px;
-
-        top: 17px;
-
-        width: 7px;
-
-        height: 7px;
-
-        border-right: 1.5px solid #8c8c8c;
-
-        border-bottom: 1.5px solid #8c8c8c;
-
-        transform: rotate(45deg);
-
-        pointer-events: none;
-
-        transition: transform 0.2s;
-
-      }
-
-      .antd-select.open .select-arrow {
-
-        top: 20px;
-
-        transform: rotate(225deg);
-
-      }
-
-      .select-clear {
-
-        display: none;
-
-        position: absolute;
-
-        right: 30px;
-
-        top: 12px;
-
-        width: 18px;
-
-        height: 18px;
-
-        padding: 0;
-
-        border-radius: 50%;
-
-        background: #bfbfbf;
-
-        color: white;
-
-        font-size: 14px;
-
-        line-height: 17px;
-
-        font-weight: 400;
-
-        z-index: 2;
-
-      }
-
-      .antd-select.has-value:hover .select-clear {
-
-        display: block;
-
-      }
-
-      .select-dropdown {
-
-        display: none;
-
-        position: absolute;
-
-        z-index: 1000;
-
-        top: calc(100% + 4px);
-
-        left: 0;
-
-        width: 100%;
-
-        max-height: 280px;
-
-        overflow-y: auto;
-
-        padding: 4px;
-
-        background: white;
-
-        border-radius: 8px;
-
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
-
-      }
-
-      .antd-select.open .select-dropdown {
-
-        display: block;
-
-      }
-
-      .product-field .select-dropdown {
-
-        min-width: 480px;
-
-      }
-
-      .select-option {
-
-        padding: 8px 12px;
-
-        border-radius: 4px;
-
-        cursor: pointer;
-
-        font-size: 14px;
-
-        line-height: 22px;
-
-        white-space: nowrap;
-
-        overflow: hidden;
-
-        text-overflow: ellipsis;
-
-      }
-
-      .select-option:hover,
-
-      .select-option.active {
-
-        background: #f5f5f5;
-
-      }
-
-      .select-option.selected {
-
-        background: #e6f4ff;
-
-        font-weight: 600;
-
-      }
-
-      .select-option mark {
-
-        padding: 0;
-
-        background: transparent;
-
-        color: #1677ff;
-
-        font-weight: 600;
-
-      }
-
-      .select-empty {
-
-        padding: 14px 12px;
-
-        color: #8c8c8c;
-
-        text-align: center;
-
-        font-size: 14px;
-
-      }
-
-      button {
-
-        height: 42px;
-
-        border: 0;
-
-        border-radius: 8px;
-
-        padding: 0 20px;
-
-        cursor: pointer;
-
-        font-weight: 600;
-
-      }
-
-      button:disabled {
-
-        cursor: not-allowed;
-
-        opacity: 0.55;
-
-      }
-
-      .primary-btn {
-
-        align-self: end;
-
-        background: #2563eb;
-
-        color: white;
-
-      }
-
-      .primary-btn:hover:not(:disabled) {
-
-        background: #1d4ed8;
-
-      }
-
-      .secondary-btn {
-
-        align-self: end;
-
-        background: #e5e7eb;
-
-        color: #111827;
-
-      }
-
-      .danger-btn {
-
-        background: #fff1f0;
-
-        color: #cf1322;
-
-        border: 1px solid #ffa39e;
-
-      }
-
-      .danger-btn:hover:not(:disabled) {
-
-        background: #ffccc7;
-
-      }
-
-      .row-delete {
-
-        height: 30px;
-
-        padding: 0 12px;
-
-        background: transparent;
-
-        color: #cf1322;
-
-        border: 1px solid #ffccc7;
-
-      }
-
-      .row-delete:hover {
-
-        background: #fff1f0;
-
-        border-color: #ff7875;
-
-      }
-
-      .hint {
-
-        margin: -8px 0 20px;
-
-        color: #6b7280;
-
-        font-size: 12px;
-
-      }
-
-      .table-wrap {
-
-        overflow-x: auto;
-
-        max-width: 100%;
-
-      }
-
-      table {
-
-        width: 100%;
-
-        border-collapse: collapse;
-
-      }
-
-      th {
-
-        text-align: left;
-
-        background: #f9fafb;
-
-        padding: 13px;
-
-        font-size: 13px;
-
-        color: #6b7280;
-
-      }
-
-      td {
-
-        padding: 14px 13px;
-
-        border-top: 1px solid #eee;
-
-        white-space: nowrap;
-
-      }
-
-      .copy {
-
-        cursor: pointer;
-
-        font-family: monospace;
-
-        font-size: 14px;
-
-      }
-
-      .copy:hover {
-
-        color: #2563eb;
-
-        text-decoration: underline;
-
-      }
-
-      .status {
-
-        padding: 5px 10px;
-
-        border-radius: 20px;
-
-        font-size: 12px;
-
-        display: inline-block;
-
-      }
-
-      .waiting {
-
-        background: #fef3c7;
-
-        color: #92400e;
-
-      }
-
-      .success {
-
-        background: #dcfce7;
-
-        color: #166534;
-
-      }
-
-      .failed {
-
-        background: #fee2e2;
-
-        color: #991b1b;
-
-      }
-
-      .toast {
-
-        position: fixed;
-
-        right: 25px;
-
-        bottom: 25px;
-
-        max-width: 420px;
-
-        background: #111827;
-
-        color: white;
-
-        padding: 12px 18px;
-
-        border-radius: 8px;
-
-        opacity: 0;
-
-        transform: translateY(10px);
-
-        transition: 0.2s;
-
-        pointer-events: none;
-
-      }
-
-      .toast.show {
-
-        opacity: 1;
-
-        transform: translateY(0);
-
-      }
-
-      .product-options {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-        width: 100%;
-        margin-bottom: 12px;
-      }
-
-      .product-option {
-        flex: 1;
-        min-width: 220px;
-        padding: 12px 16px;
-        border: 1px solid #d1d5db;
-        border-radius: 10px;
-        background: white;
-        cursor: pointer;
-        transition: 0.2s;
-      }
-
-      .product-option:hover {
-        border-color: #2563eb;
-      }
-
-      .product-option.selected {
-        border-color: #2563eb;
-        background: #eff6ff;
-        box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.12);
-      }
-
-      .product-option .product-name {
-        font-weight: 600;
-        margin-bottom: 5px;
-      }
-
-      .product-option .product-info {
-        font-size: 12px;
-        color: #6b7280;
-      }
-
-      .product-option .product-price {
-        color: #00a99d;
-        font-weight: 700;
-        margin-left: 5px;
-      }
-
-
-
-      .country-grid {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 7px;
-        max-height: 190px;
-        overflow-y: auto;
-        padding: 8px;
-        margin-top: 8px;
-        border: 1px solid #293244;
-        border-radius: 10px;
-        background: #0b1220;
-      }
-      .country-chip {
-        min-height: 34px;
-        height: auto;
-        padding: 7px 12px;
-        border: 1px solid #263244;
-        border-radius: 9px;
-        background: #101827;
-        color: #aab7cf;
-        font-size: 12px;
-        font-weight: 500;
-        white-space: nowrap;
-      }
-      .country-chip:hover,
-      .country-chip.selected {
-        color: #fff;
-        border-color: #3978ed;
-        background: #172c50;
-      }
-      .country-loading {
-        color: #9ca3af;
-        font-size: 13px;
-        padding: 8px;
-      }
-      @media (max-width: 600px) {
-
-        body {
-
-          padding: 12px;
-
-        }
-
-        .card {
-
-          padding: 16px;
-
-        }
-
-        h2 {
-
-          font-size: 20px;
-
-        }
-
-        .controls {
-
-          display: grid;
-
-          grid-template-columns: minmax(0, 1fr);
-
-          gap: 10px;
-
-        }
-
-        .controls .field,
-
-        .controls button,
-
-        .token-row button {
-
-          width: 100%;
-
-        }
-
-        .token-row {
-
-          justify-content: stretch;
-
-        }
-
-        .table-wrap {
-
-          overflow: visible;
-
-        }
-
-        table,
-
-        tbody,
-
-        tr,
-
-        td {
-
-          display: block;
-
-          width: 100%;
-
-        }
-
-        thead {
-
-          display: none;
-
-        }
-
-        tr {
-
-          margin-bottom: 12px;
-
-          padding: 8px 12px;
-
-          border: 1px solid #e5e7eb;
-
-          border-radius: 10px;
-
-          overflow: hidden;
-
-        }
-
-        td {
-
-          display: flex;
-
-          align-items: flex-start;
-
-          justify-content: space-between;
-
-          gap: 12px;
-
-          padding: 10px 0;
-
-          white-space: normal;
-
-          overflow-wrap: anywhere;
-
-        }
-
-        td:first-child {
-
-          border-top: 0;
-
-        }
-
-        td::before {
-
-          flex: 0 0 38%;
-
-          color: #6b7280;
-
-          font-size: 12px;
-
-          font-weight: 600;
-
-        }
-
-        td:nth-child(1)::before { content: 'Mã đơn'; }
-
-        td:nth-child(2)::before { content: 'Số điện thoại'; }
-
-        td:nth-child(3)::before { content: 'OTP'; }
-
-        td:nth-child(4)::before { content: 'Trạng thái'; }
-
-        td:nth-child(5)::before { content: 'Thời gian mua'; }
-
-        td:nth-child(6)::before { content: 'Thao tác'; }
-
-        .toast {
-
-          left: 12px;
-
-          right: 12px;
-
-          bottom: 12px;
-
-          max-width: none;
-
-        }
-
-      }
-
-    </style>
+:root{
+  --bg:#080d1d;--panel:#111a32;--panel2:#172342;--line:rgba(160,184,255,.16);
+  --text:#f4f7ff;--muted:#9ba9c9;--cyan:#38e8ff;--pink:#ff4fd8;--violet:#8b6cff;
+  --green:#39e6a5;--yellow:#ffd166;--red:#ff6685;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;padding:34px 22px 50px;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  color:var(--text);background:
+  radial-gradient(ellipse at 12% 0%,rgba(139,108,255,.24),transparent 34%),
+  radial-gradient(ellipse at 92% 10%,rgba(56,232,255,.16),transparent 30%),
+  linear-gradient(135deg,#080d1d 0%,#0c1328 48%,#11102a 100%);min-height:100vh
+}
+.container{max-width:1500px;margin:0 auto}
+.card{
+  position:relative;overflow:hidden;padding:30px;border:1px solid var(--line);border-radius:26px;
+  background:linear-gradient(145deg,rgba(19,29,55,.96),rgba(12,19,39,.97));
+  box-shadow:0 24px 80px rgba(0,0,0,.38),inset 0 1px rgba(255,255,255,.05)
+}
+.card:before{content:"";position:absolute;inset:0 0 auto;height:4px;background:linear-gradient(90deg,var(--cyan),var(--violet),var(--pink),#ffb86b)}
+.brand-heading{display:flex;align-items:center;gap:15px;margin-bottom:8px}
+.brand-mark{width:52px;height:52px;flex:0 0 52px;display:grid;place-items:center;border-radius:16px;background:linear-gradient(135deg,var(--cyan),var(--violet),var(--pink));color:#081326;font-size:27px;font-weight:900;box-shadow:0 8px 28px rgba(139,108,255,.28)}
+.brand-subtitle{margin-top:4px;color:#8294bd;font-size:10px;font-weight:850;letter-spacing:1.5px}
+h2{
+  margin:0 0 8px;font-size:clamp(26px,3vw,36px);font-weight:850;letter-spacing:-1.3px;
+  background:linear-gradient(90deg,#fff 8%,#9beeff 48%,#e6a6ff 90%);-webkit-background-clip:text;background-clip:text;color:transparent
+}
+#roomStatus{display:inline-flex!important;align-items:center;gap:8px;margin:5px 0 22px!important;padding:8px 13px;border:1px solid rgba(57,230,165,.25);border-radius:99px;background:rgba(57,230,165,.08);color:#8ff5cd!important;font-size:12px!important}
+#roomStatus:before{content:"";width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 12px var(--green)}
+.token-row{display:flex;justify-content:flex-end;gap:10px;margin:0 0 18px}
+.controls{
+  display:grid;grid-template-columns:repeat(4,minmax(150px,1fr));align-items:end;gap:16px;
+  margin:0 0 22px;padding:22px;border:1px solid var(--line);border-radius:20px;
+  background:linear-gradient(135deg,rgba(30,45,82,.8),rgba(20,29,57,.78))
+}
+.controls .field{width:auto!important;min-width:0}
+#countryField{grid-column:1/-1;flex-basis:auto!important}
+#balanceField{width:auto!important}
+.field label{display:block;margin:0 0 8px;color:#b8c6e7;font-size:12px;font-weight:750;letter-spacing:.5px;text-transform:uppercase}
+input,select{
+  width:100%;height:46px;padding:0 14px;border:1px solid rgba(162,184,240,.2);border-radius:12px;
+  outline:none;background:#0c1530;color:#f5f7ff;font:inherit;transition:.2s
+}
+input::placeholder{color:#7180a4}
+input:focus,select:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(56,232,255,.12)}
+select option{background:#111a32;color:white}
+#providerBalance{height:46px!important;border:1px solid rgba(57,230,165,.25)!important;border-radius:12px!important;background:rgba(57,230,165,.08)!important;color:#79f0c2;font-weight:800}
+button{
+  min-height:44px;height:auto;border:0;border-radius:12px;padding:11px 17px;cursor:pointer;
+  font:inherit;font-size:13px;font-weight:800;letter-spacing:.1px;transition:transform .18s,filter .18s,box-shadow .18s
+}
+button:hover:not(:disabled){transform:translateY(-2px);filter:brightness(1.08)}
+button:active:not(:disabled){transform:translateY(0)}
+button:disabled{cursor:not-allowed;opacity:.48}
+.primary-btn{background:linear-gradient(100deg,#20c9e8,#5576ff);color:#071326;box-shadow:0 8px 24px rgba(56,150,255,.22)}
+.secondary-btn{background:linear-gradient(110deg,#8b6cff,#c45cff);color:white;box-shadow:0 8px 22px rgba(139,108,255,.2)}
+.danger-btn,.row-delete{background:rgba(255,102,133,.1);color:#ff91a7;border:1px solid rgba(255,102,133,.3)}
+.row-delete{min-height:32px;padding:7px 12px;border-radius:9px}
+.hint{margin:-8px 0 20px;color:var(--muted);font-size:12px}
+.product-options{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:11px;width:100%;grid-column:1/-1;margin:0}
+.product-option{
+  min-width:0;padding:15px 17px;border:1px solid rgba(162,184,240,.18);border-radius:14px;
+  background:linear-gradient(145deg,rgba(24,37,72,.95),rgba(15,25,50,.95));cursor:pointer;transition:.2s
+}
+.product-option:hover{border-color:rgba(56,232,255,.6);transform:translateY(-2px)}
+.product-option.selected{border-color:var(--cyan);background:linear-gradient(135deg,rgba(22,95,126,.32),rgba(90,58,150,.28));box-shadow:0 0 0 2px rgba(56,232,255,.1),0 10px 24px rgba(0,0,0,.16)}
+.product-name{font-weight:850;color:#fff;margin-bottom:6px}
+.product-info{font-size:12px;color:#aab8d8;line-height:1.6}
+.product-price{color:#55f0bd;font-weight:850;margin-left:5px}
+.country-grid{
+  display:flex;flex-wrap:wrap;gap:8px;max-height:190px;overflow-y:auto;padding:11px;margin-top:9px;
+  border:1px solid var(--line);border-radius:14px;background:rgba(7,13,29,.65)
+}
+.country-chip{
+  min-height:35px;height:auto;padding:8px 12px;border:1px solid rgba(162,184,240,.17);border-radius:10px;
+  background:#172342;color:#b8c6e7;font-size:12px;font-weight:700;white-space:nowrap
+}
+.country-chip:hover,.country-chip.selected{color:#061324;border-color:transparent;background:linear-gradient(100deg,var(--cyan),#8b9bff);box-shadow:0 5px 16px rgba(56,232,255,.18)}
+.country-loading{padding:8px;color:var(--muted);font-size:13px}
+.table-wrap{max-width:100%;overflow-x:auto;border:1px solid var(--line);border-radius:18px;background:rgba(7,13,29,.42)}
+table{width:100%;border-collapse:collapse;min-width:760px}
+th{padding:16px 15px;text-align:left;background:linear-gradient(90deg,rgba(48,68,115,.65),rgba(36,48,88,.65));color:#aebfe4;font-size:11px;font-weight:850;letter-spacing:.8px;text-transform:uppercase}
+td{padding:16px 15px;border-top:1px solid rgba(160,184,255,.1);white-space:nowrap;color:#e7edff}
+tbody tr{transition:background .18s}
+tbody tr:hover{background:rgba(86,119,205,.09)}
+.copy{cursor:pointer;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:14px;font-weight:750;color:#76eaff}
+.copy:hover{color:#fff;text-decoration:underline;text-decoration-color:var(--pink);text-underline-offset:4px}
+.status{display:inline-flex;align-items:center;padding:6px 11px;border-radius:99px;font-size:11px;font-weight:850;letter-spacing:.2px}
+.waiting{background:rgba(255,209,102,.13);color:#ffda83;border:1px solid rgba(255,209,102,.22)}
+.success{background:rgba(57,230,165,.12);color:#6df0bd;border:1px solid rgba(57,230,165,.22)}
+.failed{background:rgba(255,102,133,.12);color:#ff8ca3;border:1px solid rgba(255,102,133,.22)}
+.toast{
+  position:fixed;right:24px;bottom:24px;z-index:2000;max-width:420px;padding:14px 19px;
+  border:1px solid rgba(56,232,255,.28);border-radius:13px;background:#172342;color:white;
+  box-shadow:0 15px 45px rgba(0,0,0,.4);opacity:0;transform:translateY(12px);transition:.22s;pointer-events:none
+}
+.toast.show{opacity:1;transform:translateY(0)}
+@media(max-width:900px){.controls{grid-template-columns:repeat(2,minmax(0,1fr))}.card{padding:22px}}
+@media(max-width:600px){
+  body{padding:12px 10px 28px}.card{padding:18px 13px;border-radius:19px}h2{font-size:25px}.brand-mark{width:44px;height:44px;flex-basis:44px}.brand-subtitle{font-size:8px;letter-spacing:1px}
+  .controls{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;padding:14px}
+  .controls .field,.controls button,.token-row button{width:100%}
+  .token-row{justify-content:stretch}.product-options{grid-template-columns:1fr}
+  .table-wrap{overflow:visible;border:0;background:transparent}
+  table,tbody,tr,td{display:block;width:100%}thead{display:none}
+  tr{margin-bottom:12px;padding:7px 13px;border:1px solid var(--line);border-radius:14px;background:rgba(18,29,56,.9);overflow:hidden}
+  td{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:11px 0;white-space:normal;overflow-wrap:anywhere;border-top:1px solid rgba(160,184,255,.1)}
+  td:first-child{border-top:0}
+  td::before{flex:0 0 38%;color:#91a2c8;font-size:11px;font-weight:850;letter-spacing:.4px;text-transform:uppercase}
+  td:nth-child(1)::before{content:'Mã đơn'}td:nth-child(2)::before{content:'Số điện thoại'}
+  td:nth-child(3)::before{content:'OTP'}td:nth-child(4)::before{content:'Trạng thái'}
+  td:nth-child(5)::before{content:'Thời gian mua'}td:nth-child(6)::before{content:'Thao tác'}
+  .toast{left:12px;right:12px;bottom:12px;max-width:none}
+}
+
+/* Layout refresh: icons, labels and new visual hierarchy */
+.token-row{margin-top:-54px;min-height:44px}
+.controls{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(190px,.8fr) minmax(170px,.65fr);align-items:start;gap:16px;margin-top:22px;padding:22px}
+.section-heading{grid-column:1/-1;display:flex;align-items:center;gap:12px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.section-icon{width:42px;height:42px;display:grid;place-items:center;border-radius:13px;background:linear-gradient(135deg,rgba(56,232,255,.17),rgba(139,108,255,.24));font-size:20px}
+.section-title{font-size:17px;font-weight:900;letter-spacing:-.3px;color:#f6f8ff}
+.section-caption{margin-top:4px;color:#91a2c8;font-size:11px}
+.field label{display:flex;align-items:center;gap:7px}
+.field-icon{font-size:15px}
+#countryField{grid-column:1/-1}
+#countrySearch{height:45px}
+#providerBalance{height:46px!important;display:flex;align-items:center;padding:0 14px;font-size:15px}
+.input-suffix{position:relative}
+.input-suffix input{padding-right:62px}
+.input-suffix span{position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:10px;font-weight:900;letter-spacing:.8px;color:#8fa3cf;pointer-events:none}
+.product-area{grid-column:1/-1;min-width:0}
+.subsection-heading{display:flex;align-items:center;gap:8px;margin-bottom:11px;color:#dce7ff;font-size:12px;font-weight:850;letter-spacing:.5px;text-transform:uppercase}
+.product-options{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.product-option{position:relative;padding:17px 18px 17px 48px}
+.product-option:before{content:"✦";position:absolute;left:17px;top:17px;color:var(--cyan);font-size:17px}
+.product-option.selected:before{content:"✓";color:#68f2c2}
+.buy-button{grid-column:1/-1;min-height:54px;font-size:14px;letter-spacing:1px;background:linear-gradient(100deg,#20d8e9,#8b6cff 65%,#ef5acb);color:#071326;box-shadow:0 10px 30px rgba(139,108,255,.25)}
+.buy-button span{margin-right:8px;font-size:18px}
+.orders-heading{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:28px 2px 13px}
+.orders-provider{display:inline-flex;align-items:center;gap:8px;padding:8px 11px;border:1px solid rgba(57,230,165,.2);border-radius:99px;background:rgba(57,230,165,.07);color:#8ff5cd;font-size:10px;font-weight:900;letter-spacing:1px;white-space:nowrap}
+.live-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 12px var(--green)}
+th{font-size:10px;letter-spacing:.7px}
+.copy:after{content:"  ⧉";font-family:Arial,sans-serif;color:#8294bd;font-size:12px}
+.status:before{content:"";width:6px;height:6px;margin-right:6px;border-radius:50%;background:currentColor}
+@media(max-width:900px){.controls{grid-template-columns:repeat(2,minmax(0,1fr))}.section-heading,.product-area,.buy-button,#countryField{grid-column:1/-1}}
+@media(max-width:600px){.token-row{margin:12px 0 0;min-height:0}.controls{grid-template-columns:minmax(0,1fr);gap:13px;padding:15px}.section-heading,.product-area,.buy-button,#countryField{grid-column:1}.orders-heading{align-items:flex-start;flex-direction:column;margin-top:22px}.product-options{grid-template-columns:1fr}}
+
+</style>
 
   </head>
 
@@ -810,49 +168,50 @@
 
       <div class="card">
 
-        <h2>SMS Number Manager</h2>
+        <div class="brand-heading">
+          <div class="brand-mark" aria-hidden="true">✦</div>
+          <div>
+            <h2>OTP COMMAND CENTER</h2>
+            <div class="brand-subtitle">✦ TRUNG TÂM ĐIỀU KHIỂN OTP · SMSCODE ✦</div>
+          </div>
+        </div>
 
         <div id="roomStatus" style="font-size:12px;color:#6b7280;margin-bottom:12px">Thiết bị đang kết nối: 0</div>
 
         <div class="token-row">
 
-          <button id="copyAllOtp" class="secondary-btn" type="button" disabled>Copy OTP</button>
+          <button id="copyAllOtp" class="secondary-btn" type="button" disabled>📋 SAO CHÉP OTP</button>
 
         </div>
 
         <div class="controls">
-
-          <div class="field">
-            <label for="providerSelect">Nhà cung cấp</label>
-            <select id="providerSelect">
-              <option value="smscode">SMSCode</option>
-              <option value="autosms">AutoSMS</option>
-            </select>
+          <div class="section-heading">
+            <span class="section-icon">⚙️</span>
+            <div><div class="section-title">Thiết lập thuê số</div><div class="section-caption">Chọn quốc gia, cấu hình và dịch vụ SMS</div></div>
           </div>
-          <div class="field" id="countryField" style="width:100%;flex-basis:100%">
-            <label for="countrySearch">Chọn quốc gia SMSCode</label>
-            <input id="countrySearch" type="search" placeholder="Tìm quốc gia..." autocomplete="off" />
-            <div id="countryGrid" class="country-grid">
-              <span class="country-loading">Đang tải danh sách quốc gia...</span>
-            </div>
+          <div class="field" id="countryField">
+            <label for="countrySearch"><span class="field-icon">🌍</span> Quốc gia</label>
+            <input id="countrySearch" type="search" placeholder="⌕  Tìm tên quốc gia hoặc mã vùng..." autocomplete="off" />
+            <div id="countryGrid" class="country-grid"><span class="country-loading">Đang tải danh sách quốc gia...</span></div>
           </div>
-          <div class="field" id="balanceField" style="width:190px">
-            <label>Số dư</label>
-            <div id="providerBalance" style="height:42px;display:flex;align-items:center;padding:0 12px;border:1px solid #d1d5db;border-radius:8px;background:#f9fafb">—</div>
+          <div class="field balance-panel" id="balanceField">
+            <label><span class="field-icon">💳</span> Số dư tài khoản</label>
+            <div id="providerBalance">—</div>
           </div>
-          <div class="field">
-
-            <label for="interval">Kiểm tra OTP (giây)</label>
-
-            <input id="interval" type="number" value="5" min="1" />
-
+          <div class="field interval-panel">
+            <label for="interval"><span class="field-icon">⏱️</span> Chu kỳ dò OTP</label>
+            <div class="input-suffix"><input id="interval" type="number" value="5" min="1" /><span>GIÂY</span></div>
           </div>
-
-          <div class="product-options" id="productOptions"><div class="product-option">Đang tải sản phẩm...</div></div>
-<button id="localBuyButton" class="secondary-btn" type="button">Lấy số riêng thiết bị này</button>
-
+          <div class="product-area">
+            <div class="subsection-heading"><span>📦</span> Gói dịch vụ khả dụng</div>
+            <div class="product-options" id="productOptions"><div class="product-option">Đang tải sản phẩm...</div></div>
+          </div>
+          <button id="localBuyButton" class="secondary-btn buy-button" type="button"><span aria-hidden="true">⚡</span> THUÊ SỐ NGAY</button>
         </div>
-
+        <div class="orders-heading">
+          <div><div class="section-title">📋 Danh sách đơn hàng</div><div class="section-caption">Theo dõi số điện thoại và mã OTP theo thời gian thực</div></div>
+          <div class="orders-provider"><span class="live-dot"></span> SMSCODE LIVE</div>
+        </div>
         <div class="table-wrap">
 
           <table>
@@ -861,17 +220,17 @@
 
               <tr>
 
-                <th>Mã đơn</th>
+                <th>🧾 MÃ ĐƠN</th>
 
-                <th>Số điện thoại</th>
+                <th>📱 SỐ ĐIỆN THOẠI</th>
 
-                <th>OTP</th>
+                <th>🔐 MÃ OTP</th>
 
-                <th>Trạng thái</th>
+                <th>📡 TRẠNG THÁI</th>
 
-                <th>Thời gian mua</th>
+                <th>🕒 THỜI GIAN</th>
 
-                <th>Thao tác</th>
+                <th>🛠️ THAO TÁC</th>
 
               </tr>
 
@@ -951,7 +310,7 @@
 
       loadProviderProducts()
       elements.providerSelect.addEventListener('change', async () => {
-        activeProvider = elements.providerSelect.value
+        activeProvider = 'smscode'
         PRODUCT_ID = null
         elements.countryField.style.display = activeProvider === 'smscode' ? '' : 'none'
         await loadProviderProducts()
@@ -1086,159 +445,7 @@
         }
 
         try {
-          if (activeProvider === 'autosms') {
-            selectedCallingCode = '1'
-            elements.countryField.style.display = 'none'
-            const option = document.createElement('div')
-            option.className = 'product-option selected'
-            const name = document.createElement('div')
-            name.className = 'product-name'
-            name.textContent = 'TikTok Mỹ · AutoSMS'
-            const info = document.createElement('div')
-            info.className = 'product-info'
-            info.textContent = 'Hoa Kỳ (+1) · Giá và số lượng do AutoSMS trả về khi thuê'
-            option.append(name, info)
-            productOptions.appendChild(option)
-            PRODUCT_ID = 1
-            await loadProviderBalance()
-            return
-          }
-
-          elements.countryField.style.display = ''
-          if (!availableCountries.length) {
-            availableCountries = asArray(await client.getCountries())
-              .filter(country => Number(country.id ?? country.country_id) > 0)
-              .sort((a, b) => textOf(a, ['name', 'country_name', 'title'])
-                .localeCompare(textOf(b, ['name', 'country_name', 'title'])))
-          }
-
-          if (!availableCountries.length) {
-            throw new Error('SMSCode không trả về danh sách quốc gia.')
-          }
-
-          const previousId = selectedCountry ? countryIdOf(selectedCountry) : null
-
-          selectedCountry = availableCountries.find(country =>
-            countryIdOf(country) === previousId
-          ) || availableCountries.find(country => {
-            const iso = countryIsoOf(country)
-            const name = countryNameOf(country).toLowerCase()
-            return ['US', 'USA'].includes(iso) || name.includes('united states') || name === 'usa'
-          }) || availableCountries[0]
-
-          selectedCallingCode = callingCodeOf(selectedCountry)
-          renderCountryChips()
-
-          await loadTikTokProductsForSelectedCountry()
-          await loadProviderBalance()
-        } catch (error) {
-          showMessage(`Không tải được danh mục: ${error.message || error}`)
-          showToast(error.message || String(error))
-        } finally {
-          loadingProducts = false
-          updateBuyButton()
-        }
-      }
-
-      async function loadTikTokProductsForSelectedCountry() {
-        PRODUCT_ID = null
-        productOptions.innerHTML = ''
-
-        if (!selectedCountry) {
-          const message = document.createElement('div')
-          message.className = 'product-option'
-          message.textContent = 'Hãy chọn quốc gia.'
-          productOptions.appendChild(message)
-          return
-        }
-
-        const countryId = Number(selectedCountry.id ?? selectedCountry.country_id)
-        const countryName = textOf(selectedCountry, ['name', 'country_name', 'title']) || 'Quốc gia'
-        selectedCallingCode = callingCodeOf(selectedCountry)
-
-        if (!Number.isFinite(countryId) || countryId <= 0) {
-          throw new Error('ID quốc gia SMSCode không hợp lệ.')
-        }
-
-        const services = asArray(await client.getServices(countryId))
-        const tiktokServices = services.filter(item => {
-          const name = textOf(item, ['name', 'service_name', 'title', 'platform_name']).toLowerCase()
-          const slug = textOf(item, ['slug', 'code', 'platform', 'service']).toLowerCase()
-          return name.includes('tiktok') || slug.includes('tiktok')
-        })
-
-        if (!tiktokServices.length) {
-          const message = document.createElement('div')
-          message.className = 'product-option'
-          message.textContent = `SMSCode không có dịch vụ TikTok tại ${countryName}.`
-          productOptions.appendChild(message)
-          return
-        }
-
-        let productCount = 0
-        for (const service of tiktokServices) {
-          const serviceId = Number(service.id ?? service.platform_id ?? service.service_id)
-          if (!Number.isFinite(serviceId) || serviceId <= 0) continue
-
-          const products = asArray(await client.getProducts(countryId, serviceId))
-          products.forEach(product => {
-            const id = Number(product.id ?? product.product_id)
-            if (!Number.isFinite(id) || id <= 0) return
-
-            const option = document.createElement('div')
-            option.className = 'product-option'
-            option.dataset.productId = String(id)
-
-            const name = document.createElement('div')
-            name.className = 'product-name'
-            name.textContent = product.name || product.product_name ||
-              textOf(service, ['name', 'service_name', 'title']) || 'TikTok'
-
-            const info = document.createElement('div')
-            info.className = 'product-info'
-            const stockRaw = product.available ?? product.available_count ??
-              product.stock ?? product.quantity_available ?? product.avail
-            const stock = Number(stockRaw)
-            const stockText = stockRaw != null && Number.isFinite(stock)
-              ? stock.toLocaleString('en-US')
-              : 'không rõ'
-            info.textContent = `${countryName}${selectedCallingCode ? ` (+${selectedCallingCode})` : ''} · Còn ${stockText} số `
-
-            const price = document.createElement('span')
-            price.className = 'product-price'
-            price.textContent = formatProductPrice(product)
-            info.appendChild(price)
-            option.append(name, info)
-            option.addEventListener('click', () => chooseProduct(option))
-            productOptions.appendChild(option)
-            productCount++
-          })
-        }
-
-        if (!productCount) {
-          const message = document.createElement('div')
-          message.className = 'product-option'
-          message.textContent = `Không có sản phẩm TikTok khả dụng tại ${countryName}.`
-          productOptions.appendChild(message)
-          return
-        }
-
-        chooseProduct(productOptions.querySelector('.product-option[data-product-id]'), false)
-      }
-
-      async function loadProviderBalance() {
-        if (activeProvider === 'autosms') {
-          try {
-            const result = await fetch('/api/autosms/balance').then(r => r.json())
-            if (!result.success) throw new Error(result.error?.message || 'Không lấy được số dư')
-            const value = result.data?.balance ?? result.data?.amount ?? result.data
-            elements.providerBalance.textContent = typeof value === 'object' ? JSON.stringify(value) : String(value ?? '—')
-          } catch (error) {
-            elements.providerBalance.textContent = 'Không tải được'
-          }
-        } else {
           elements.providerBalance.textContent = 'SMSCode'
-        }
       }
 
       function getDeviceId() {
@@ -1314,7 +521,7 @@
 
       function sharedSettingsSnapshot() {
         return {
-          provider: activeProvider,
+          provider: 'smscode',
           countryId: selectedCountry ? countryIdOf(selectedCountry) : null,
           countryName: selectedCountry ? countryNameOf(selectedCountry) : null,
           callingCode: selectedCallingCode || '',
@@ -1338,7 +545,7 @@
         applyingRemoteSettings = true
 
         try {
-          const nextProvider = settings.provider === 'autosms' ? 'autosms' : 'smscode'
+          const nextProvider = 'smscode'
           const providerChanged = activeProvider !== nextProvider
           const nextCountryId = Number(settings.countryId || 0)
           const countryChanged = nextProvider === 'smscode' &&
@@ -1378,9 +585,7 @@
             if (targetProduct) chooseProduct(targetProduct, false)
           }
 
-          if (activeProvider === 'autosms') {
-            selectedCallingCode = '1'
-          }
+          
 
           if (revision) currentSharedRevision = revision
           updateBuyButton()
@@ -1459,33 +664,21 @@
         buying = true
         const provider = activeProvider
         const productId = PRODUCT_ID
-        if (provider === 'smscode' && (!Number.isFinite(productId) || productId <= 0)) {
+        if (!Number.isFinite(productId) || productId <= 0) {
           buying = false
           setBusy(elements.localBuyButton, false)
           showToast('Chưa có sản phẩm SMSCode hợp lệ.')
           return
         }
         const quantity = 1
-        const callingCode = provider === 'autosms' ? '1' : selectedCallingCode
+        const callingCode = selectedCallingCode
         setBusy(elements.localBuyButton, true, 'Đang tạo...')
         try {
-          let result
-          if (provider === 'autosms') {
-            const response = await fetch('/api/autosms/orders/create', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ quantity })
-            })
-            const payload = await response.json()
-            if (!response.ok || !payload.success) throw new Error(payload.error?.message || 'Không thuê được số AutoSMS.')
-            result = payload.data
-          } else {
-            result = await client.createOrder({
-              productId,
-              quantity,
-              idempotencyKey: makeIdempotencyKey(),
-            })
-          }
+          const result = await client.createOrder({
+            productId,
+            quantity,
+            idempotencyKey: makeIdempotencyKey(),
+          })
 
           for (const order of result.orders || []) {
             orderProviders.set(String(order.id), { provider, callingCode })
@@ -1522,16 +715,7 @@
 
           try {
 
-            const providerInfo = orderProviders.get(String(orderId)) || { provider: 'smscode' }
-            let order
-            if (providerInfo.provider === 'autosms') {
-              const response = await fetch(`/api/autosms/orders/${encodeURIComponent(orderId)}`)
-              const payload = await response.json()
-              if (!response.ok || !payload.success) throw new Error(payload.error?.message || 'Lỗi kiểm tra OTP AutoSMS')
-              order = payload.data
-            } else {
-              order = await client.getOrder(orderId)
-            }
+            const order = await client.getOrder(orderId)
 
             if (!document.getElementById(`row-${orderId}`)) return polling.stop(orderId)
 
@@ -1566,8 +750,8 @@
         const row = document.createElement('tr')
 
         row.id = `row-${order.id}`
-        const provider = order._provider || activeProvider
-        const callingCode = order._callingCode || (provider === 'autosms' ? '1' : selectedCallingCode)
+        const provider = 'smscode'
+        const callingCode = order._callingCode || selectedCallingCode
         orderProviders.set(String(order.id), { provider, callingCode })
 
         row.append(
