@@ -158,6 +158,14 @@ th{font-size:10px;letter-spacing:.7px}
 @media(max-width:900px){.controls{grid-template-columns:repeat(2,minmax(0,1fr))}.section-heading,.product-area,.buy-button,#countryField{grid-column:1/-1}}
 @media(max-width:600px){.token-row{margin:12px 0 0;min-height:0}.controls{grid-template-columns:minmax(0,1fr);gap:13px;padding:15px}.section-heading,.product-area,.buy-button,#countryField{grid-column:1}.orders-heading{align-items:flex-start;flex-direction:column;margin-top:22px}.product-options{grid-template-columns:1fr}}
 
+
+.autosms-service{grid-column:1/-1}
+.service-tile{display:flex;align-items:center;gap:13px;padding:15px 17px;border:1px solid rgba(56,232,255,.28);border-radius:14px;background:linear-gradient(110deg,rgba(56,232,255,.10),rgba(139,108,255,.13))}
+.service-flag{font-size:28px}
+.service-name{font-size:14px;font-weight:900;color:#fff}
+.service-caption{margin-top:4px;color:#9eafd2;font-size:11px}
+.service-check{margin-left:auto;width:26px;height:26px;display:grid;place-items:center;border-radius:50%;background:rgba(57,230,165,.15);color:#65efb8;font-weight:900}
+
 </style>
 
   </head>
@@ -168,13 +176,7 @@ th{font-size:10px;letter-spacing:.7px}
 
       <div class="card">
 
-        <div class="brand-heading">
-          <div class="brand-mark" aria-hidden="true">✦</div>
-          <div>
-            <h2>OTP COMMAND CENTER</h2>
-            <div class="brand-subtitle">✦ TRUNG TÂM ĐIỀU KHIỂN OTP · SMSCODE ✦</div>
-          </div>
-        </div>
+        <h2>OTP COMMAND CENTER</h2>
 
         <div id="roomStatus" style="font-size:12px;color:#6b7280;margin-bottom:12px">Thiết bị đang kết nối: 0</div>
 
@@ -185,14 +187,19 @@ th{font-size:10px;letter-spacing:.7px}
         </div>
 
         <div class="controls">
+          <select id="providerSelect" hidden><option value="autosms" selected>AutoSMS</option></select>
+          <div id="countryField" hidden><input id="countrySearch" type="search" /><div id="countryGrid"></div></div>
           <div class="section-heading">
             <span class="section-icon">⚙️</span>
-            <div><div class="section-title">Thiết lập thuê số</div><div class="section-caption">Chọn quốc gia, cấu hình và dịch vụ SMS</div></div>
+            <div><div class="section-title">Thiết lập thuê số</div><div class="section-caption">Cấu hình dịch vụ nhận mã xác thực qua AutoSMS</div></div>
           </div>
-          <div class="field" id="countryField">
-            <label for="countrySearch"><span class="field-icon">🌍</span> Quốc gia</label>
-            <input id="countrySearch" type="search" placeholder="⌕  Tìm tên quốc gia hoặc mã vùng..." autocomplete="off" />
-            <div id="countryGrid" class="country-grid"><span class="country-loading">Đang tải danh sách quốc gia...</span></div>
+          <div class="field autosms-service">
+            <label><span class="field-icon">🇺🇸</span> Dịch vụ đang sử dụng</label>
+            <div class="service-tile">
+              <div class="service-flag">🇺🇸</div>
+              <div><div class="service-name">TikTok Mỹ · AutoSMS</div><div class="service-caption">Hoa Kỳ (+1) · Thuê số tự động</div></div>
+              <span class="service-check">✓</span>
+            </div>
           </div>
           <div class="field balance-panel" id="balanceField">
             <label><span class="field-icon">💳</span> Số dư tài khoản</label>
@@ -203,14 +210,16 @@ th{font-size:10px;letter-spacing:.7px}
             <div class="input-suffix"><input id="interval" type="number" value="5" min="1" /><span>GIÂY</span></div>
           </div>
           <div class="product-area">
-            <div class="subsection-heading"><span>📦</span> Gói dịch vụ khả dụng</div>
-            <div class="product-options" id="productOptions"><div class="product-option">Đang tải sản phẩm...</div></div>
+            <div class="subsection-heading"><span>📦</span> Gói dịch vụ</div>
+            <div class="product-options" id="productOptions">
+              <div class="product-option selected"><div class="product-name">TikTok Mỹ · AutoSMS</div><div class="product-info">Hoa Kỳ (+1) · Giá và số lượng do AutoSMS cung cấp khi thuê</div></div>
+            </div>
           </div>
           <button id="localBuyButton" class="secondary-btn buy-button" type="button"><span aria-hidden="true">⚡</span> THUÊ SỐ NGAY</button>
         </div>
         <div class="orders-heading">
           <div><div class="section-title">📋 Danh sách đơn hàng</div><div class="section-caption">Theo dõi số điện thoại và mã OTP theo thời gian thực</div></div>
-          <div class="orders-provider"><span class="live-dot"></span> SMSCODE LIVE</div>
+          <div class="orders-provider"><span class="live-dot"></span> AUTOSMS LIVE</div>
         </div>
         <div class="table-wrap">
 
@@ -298,7 +307,7 @@ th{font-size:10px;letter-spacing:.7px}
 
       let client = SmscodeApi.createSmscodeClient()
       // Trạng thái nhà cung cấp và thông tin từng đơn hàng
-      let activeProvider = 'smscode'
+      let activeProvider = 'autosms'
       let selectedCallingCode = '1'
       let availableCountries = []
       let selectedCountry = null
@@ -310,9 +319,9 @@ th{font-size:10px;letter-spacing:.7px}
 
       loadProviderProducts()
       elements.providerSelect.addEventListener('change', async () => {
-        activeProvider = 'smscode'
+        activeProvider = elements.providerSelect.value
         PRODUCT_ID = null
-        elements.countryField.style.display = activeProvider === 'smscode' ? '' : 'none'
+        elements.countryField.style.display = 'none'
         await loadProviderProducts()
         updateBuyButton()
         broadcastSharedSettings()
@@ -445,7 +454,159 @@ th{font-size:10px;letter-spacing:.7px}
         }
 
         try {
+          if (activeProvider === 'autosms') {
+            selectedCallingCode = '1'
+            elements.countryField.style.display = 'none'
+            const option = document.createElement('div')
+            option.className = 'product-option selected'
+            const name = document.createElement('div')
+            name.className = 'product-name'
+            name.textContent = 'TikTok Mỹ · AutoSMS'
+            const info = document.createElement('div')
+            info.className = 'product-info'
+            info.textContent = 'Hoa Kỳ (+1) · Giá và số lượng do AutoSMS trả về khi thuê'
+            option.append(name, info)
+            productOptions.appendChild(option)
+            PRODUCT_ID = 1
+            await loadProviderBalance()
+            return
+          }
+
+          elements.countryField.style.display = 'none'
+          if (!availableCountries.length) {
+            availableCountries = asArray(await client.getCountries())
+              .filter(country => Number(country.id ?? country.country_id) > 0)
+              .sort((a, b) => textOf(a, ['name', 'country_name', 'title'])
+                .localeCompare(textOf(b, ['name', 'country_name', 'title'])))
+          }
+
+          if (!availableCountries.length) {
+            throw new Error('SMSCode không trả về danh sách quốc gia.')
+          }
+
+          const previousId = selectedCountry ? countryIdOf(selectedCountry) : null
+
+          selectedCountry = availableCountries.find(country =>
+            countryIdOf(country) === previousId
+          ) || availableCountries.find(country => {
+            const iso = countryIsoOf(country)
+            const name = countryNameOf(country).toLowerCase()
+            return ['US', 'USA'].includes(iso) || name.includes('united states') || name === 'usa'
+          }) || availableCountries[0]
+
+          selectedCallingCode = callingCodeOf(selectedCountry)
+          renderCountryChips()
+
+          await loadTikTokProductsForSelectedCountry()
+          await loadProviderBalance()
+        } catch (error) {
+          showMessage(`Không tải được danh mục: ${error.message || error}`)
+          showToast(error.message || String(error))
+        } finally {
+          loadingProducts = false
+          updateBuyButton()
+        }
+      }
+
+      async function loadTikTokProductsForSelectedCountry() {
+        PRODUCT_ID = null
+        productOptions.innerHTML = ''
+
+        if (!selectedCountry) {
+          const message = document.createElement('div')
+          message.className = 'product-option'
+          message.textContent = 'Hãy chọn quốc gia.'
+          productOptions.appendChild(message)
+          return
+        }
+
+        const countryId = Number(selectedCountry.id ?? selectedCountry.country_id)
+        const countryName = textOf(selectedCountry, ['name', 'country_name', 'title']) || 'Quốc gia'
+        selectedCallingCode = callingCodeOf(selectedCountry)
+
+        if (!Number.isFinite(countryId) || countryId <= 0) {
+          throw new Error('ID quốc gia SMSCode không hợp lệ.')
+        }
+
+        const services = asArray(await client.getServices(countryId))
+        const tiktokServices = services.filter(item => {
+          const name = textOf(item, ['name', 'service_name', 'title', 'platform_name']).toLowerCase()
+          const slug = textOf(item, ['slug', 'code', 'platform', 'service']).toLowerCase()
+          return name.includes('tiktok') || slug.includes('tiktok')
+        })
+
+        if (!tiktokServices.length) {
+          const message = document.createElement('div')
+          message.className = 'product-option'
+          message.textContent = `SMSCode không có dịch vụ TikTok tại ${countryName}.`
+          productOptions.appendChild(message)
+          return
+        }
+
+        let productCount = 0
+        for (const service of tiktokServices) {
+          const serviceId = Number(service.id ?? service.platform_id ?? service.service_id)
+          if (!Number.isFinite(serviceId) || serviceId <= 0) continue
+
+          const products = asArray(await client.getProducts(countryId, serviceId))
+          products.forEach(product => {
+            const id = Number(product.id ?? product.product_id)
+            if (!Number.isFinite(id) || id <= 0) return
+
+            const option = document.createElement('div')
+            option.className = 'product-option'
+            option.dataset.productId = String(id)
+
+            const name = document.createElement('div')
+            name.className = 'product-name'
+            name.textContent = product.name || product.product_name ||
+              textOf(service, ['name', 'service_name', 'title']) || 'TikTok'
+
+            const info = document.createElement('div')
+            info.className = 'product-info'
+            const stockRaw = product.available ?? product.available_count ??
+              product.stock ?? product.quantity_available ?? product.avail
+            const stock = Number(stockRaw)
+            const stockText = stockRaw != null && Number.isFinite(stock)
+              ? stock.toLocaleString('en-US')
+              : 'không rõ'
+            info.textContent = `${countryName}${selectedCallingCode ? ` (+${selectedCallingCode})` : ''} · Còn ${stockText} số `
+
+            const price = document.createElement('span')
+            price.className = 'product-price'
+            price.textContent = formatProductPrice(product)
+            info.appendChild(price)
+            option.append(name, info)
+            option.addEventListener('click', () => chooseProduct(option))
+            productOptions.appendChild(option)
+            productCount++
+          })
+        }
+
+        if (!productCount) {
+          const message = document.createElement('div')
+          message.className = 'product-option'
+          message.textContent = `Không có sản phẩm TikTok khả dụng tại ${countryName}.`
+          productOptions.appendChild(message)
+          return
+        }
+
+        chooseProduct(productOptions.querySelector('.product-option[data-product-id]'), false)
+      }
+
+      async function loadProviderBalance() {
+        if (activeProvider === 'autosms') {
+          try {
+            const result = await fetch('/api/autosms/balance').then(r => r.json())
+            if (!result.success) throw new Error(result.error?.message || 'Không lấy được số dư')
+            const value = result.data?.balance ?? result.data?.amount ?? result.data
+            elements.providerBalance.textContent = typeof value === 'object' ? JSON.stringify(value) : String(value ?? '—')
+          } catch (error) {
+            elements.providerBalance.textContent = 'Không tải được'
+          }
+        } else {
           elements.providerBalance.textContent = 'SMSCode'
+        }
       }
 
       function getDeviceId() {
@@ -521,7 +682,7 @@ th{font-size:10px;letter-spacing:.7px}
 
       function sharedSettingsSnapshot() {
         return {
-          provider: 'smscode',
+          provider: activeProvider,
           countryId: selectedCountry ? countryIdOf(selectedCountry) : null,
           countryName: selectedCountry ? countryNameOf(selectedCountry) : null,
           callingCode: selectedCallingCode || '',
@@ -545,7 +706,7 @@ th{font-size:10px;letter-spacing:.7px}
         applyingRemoteSettings = true
 
         try {
-          const nextProvider = 'smscode'
+          const nextProvider = settings.provider === 'autosms' ? 'autosms' : 'smscode'
           const providerChanged = activeProvider !== nextProvider
           const nextCountryId = Number(settings.countryId || 0)
           const countryChanged = nextProvider === 'smscode' &&
@@ -560,7 +721,7 @@ th{font-size:10px;letter-spacing:.7px}
           if (providerChanged) {
             activeProvider = nextProvider
             elements.providerSelect.value = activeProvider
-            elements.countryField.style.display = activeProvider === 'smscode' ? '' : 'none'
+            elements.countryField.style.display = 'none'
             await loadProviderProducts()
           }
 
@@ -585,7 +746,9 @@ th{font-size:10px;letter-spacing:.7px}
             if (targetProduct) chooseProduct(targetProduct, false)
           }
 
-          
+          if (activeProvider === 'autosms') {
+            selectedCallingCode = '1'
+          }
 
           if (revision) currentSharedRevision = revision
           updateBuyButton()
@@ -664,21 +827,33 @@ th{font-size:10px;letter-spacing:.7px}
         buying = true
         const provider = activeProvider
         const productId = PRODUCT_ID
-        if (!Number.isFinite(productId) || productId <= 0) {
+        if (provider === 'smscode' && (!Number.isFinite(productId) || productId <= 0)) {
           buying = false
           setBusy(elements.localBuyButton, false)
           showToast('Chưa có sản phẩm SMSCode hợp lệ.')
           return
         }
         const quantity = 1
-        const callingCode = selectedCallingCode
+        const callingCode = provider === 'autosms' ? '1' : selectedCallingCode
         setBusy(elements.localBuyButton, true, 'Đang tạo...')
         try {
-          const result = await client.createOrder({
-            productId,
-            quantity,
-            idempotencyKey: makeIdempotencyKey(),
-          })
+          let result
+          if (provider === 'autosms') {
+            const response = await fetch('/api/autosms/orders/create', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ quantity })
+            })
+            const payload = await response.json()
+            if (!response.ok || !payload.success) throw new Error(payload.error?.message || 'Không thuê được số AutoSMS.')
+            result = payload.data
+          } else {
+            result = await client.createOrder({
+              productId,
+              quantity,
+              idempotencyKey: makeIdempotencyKey(),
+            })
+          }
 
           for (const order of result.orders || []) {
             orderProviders.set(String(order.id), { provider, callingCode })
@@ -715,7 +890,16 @@ th{font-size:10px;letter-spacing:.7px}
 
           try {
 
-            const order = await client.getOrder(orderId)
+            const providerInfo = orderProviders.get(String(orderId)) || { provider: 'smscode' }
+            let order
+            if (providerInfo.provider === 'autosms') {
+              const response = await fetch(`/api/autosms/orders/${encodeURIComponent(orderId)}`)
+              const payload = await response.json()
+              if (!response.ok || !payload.success) throw new Error(payload.error?.message || 'Lỗi kiểm tra OTP AutoSMS')
+              order = payload.data
+            } else {
+              order = await client.getOrder(orderId)
+            }
 
             if (!document.getElementById(`row-${orderId}`)) return polling.stop(orderId)
 
@@ -750,8 +934,8 @@ th{font-size:10px;letter-spacing:.7px}
         const row = document.createElement('tr')
 
         row.id = `row-${order.id}`
-        const provider = 'smscode'
-        const callingCode = order._callingCode || selectedCallingCode
+        const provider = order._provider || activeProvider
+        const callingCode = order._callingCode || (provider === 'autosms' ? '1' : selectedCallingCode)
         orderProviders.set(String(order.id), { provider, callingCode })
 
         row.append(
